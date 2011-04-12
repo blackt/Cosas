@@ -1,0 +1,73 @@
+import javax.swing.*;
+import java.awt.*;
+
+public class Graficos extends JPanel {
+	MT turing = new MT();
+	Point puntoLista= new Point(50, 50);
+	Point puntoEstados=new Point(30,50);
+	private final int TIEMPO;
+	public Graficos(String archivo,int tiempo){
+		TIEMPO=tiempo;
+		turing.Entrada(archivo);
+		setSize(300, 300);
+		setVisible(true);	
+	}
+
+	public void paint(Graphics g){
+		
+		g.setColor(Color.WHITE);
+		g.fillRect(0, 0, 300, 300);
+		g.setColor(Color.BLACK);
+		if(turing.Lista()!=null)
+		for(String cadena: turing.Lista()){
+			g.drawRect(puntoLista.x, puntoLista.y, 20, 20);
+			g.drawString(cadena, puntoLista.x+10, puntoLista.y+15);
+			puntoLista.translate(20, 0);
+		}
+		puntoLista.setLocation(50,50);
+		
+		for(String cadena: turing.Estados()){
+			if(cadena.equals(turing.Estado())){
+				g.setColor(Color.YELLOW);
+				g.fillRect(puntoEstados.x, puntoEstados.y, 20, 20);
+				g.setColor(Color.BLACK);
+				}
+			else
+				g.drawRect(puntoEstados.x, puntoEstados.y, 20, 20);
+			
+				g.drawString(cadena, puntoEstados.x+10, puntoEstados.y+15);
+				puntoEstados.translate(0, 20);
+		}
+		puntoEstados.setLocation(30,50);
+		
+		g.drawLine(100, 100, 50+10 +turing.posicion()*20, 55);
+		if(turing.Funcion()!=null)
+		g.drawString(turing.Funcion(),150,150);
+		
+	}
+	public void tiempo() {
+		try {
+			do {
+				repaint();
+				Thread.sleep(TIEMPO);
+				}while(!turing.siguiente());
+			
+			repaint();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void main(String[] args) {
+		Graficos cuadro=new Graficos(args[0],Integer.parseInt(args[1]));
+		JFrame ventana=new JFrame("Maquina de Turing");
+		ventana.setLayout(new BorderLayout());
+		ventana.pack();
+		ventana.add(cuadro);
+		ventana.setSize(300,300);
+		ventana.setVisible(true);
+		cuadro.tiempo();
+		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+}

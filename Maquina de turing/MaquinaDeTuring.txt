@@ -1,0 +1,8 @@
+1 1 1 1
+p
+s
+p q r s
+1    0     b
+ q0d,   p0i, rbd
+ q1d,  q0d , p0i
+   ,   r1d,  sbp
